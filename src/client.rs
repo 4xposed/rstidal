@@ -173,16 +173,18 @@ mod tests {
     use super::*;
     use mockito::mock;
     use crate::auth::SessionInfo;
+    use crate::model::artist::ArtistType;
 
     #[tokio::test]
     async fn client_get() {
         let mut params: HashMap<String, String> = HashMap::new();
 
         // All requesets going to Tidal ned to append ?countryCode=$USER_REGION
-        let _mock = mock("GET", "/?countryCode=US")
-            .with_status(200)
-            .with_body(r#"{"result": "ok"}"#)
-            .create();
+        let _mock = mock_request_success(
+            "GET",
+            "/?countryCode=US",
+            r#"{"result": "ok"}"#
+        );
 
         let client = client();
         let response = client.get("/", &mut params).await.unwrap();
@@ -191,16 +193,20 @@ mod tests {
 
     #[tokio::test]
     async fn client_artist() {
-        let _mock = mock_request_success(
+        let _mock = mock_request_success_from_file(
             "GET",
-            "/artists/1234?countryCode=US",
-            r#"{"id": 123456, "name": "myband"}"#
-            );
+            "/artists/37312?countryCode=US",
+            "tests/files/artist.json"
+        );
 
-        let result: Artist = client().artist("1234").await.unwrap();
+        let result: Artist = client().artist("37312").await.unwrap();
         let expected_result = Artist {
-            id: Some(123456),
-            name: Some("myband".to_owned())
+            id: Some(37312),
+            name: Some("myband".to_owned()),
+            artist_types: Some(vec!(ArtistType::Artist)),
+            url: Some("http://www.tidal.com/artist/37312".to_owned()),
+            picture: Some("8cd9716d-0206-46a6-a70a-7dc2e427d11b".to_owned()),
+            popularity: Some(43)
         };
         assert_eq!(result.id, expected_result.id);
         assert_eq!(result.name, expected_result.name);
@@ -210,6 +216,13 @@ mod tests {
         mock(method, path)
             .with_status(200)
             .with_body(body)
+            .create()
+    }
+
+    fn mock_request_success_from_file(method: &str, path: &str, file_path: &str) -> mockito::Mock {
+        mock(method, path)
+            .with_status(200)
+            .with_body_from_file(file_path)
             .create()
     }
 

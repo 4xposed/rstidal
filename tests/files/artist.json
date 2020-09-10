@@ -1,0 +1,37 @@
+{
+  "id": 37312,
+  "name": "myband",
+  "artistTypes": [
+    "ARTIST",
+    "CONTRIBUTOR"
+  ],
+  "url": "http://www.tidal.com/artist/37312",
+  "picture": "8cd9716d-0206-46a6-a70a-7dc2e427d11b",
+  "popularity": 43,
+  "artistRoles": [
+    {
+      "categoryId": -1,
+      "category": "Artist"
+    },
+    {
+      "categoryId": 2,
+      "category": "Songwriter"
+    },
+    {
+      "categoryId": 1,
+      "category": "Producer"
+    },
+    {
+      "categoryId": 3,
+      "category": "Engineer"
+    },
+    {
+      "categoryId": 11,
+      "category": "Performer"
+    },
+    {
+      "categoryId": 10,
+      "category": "Production team"
+    }
+  ]
+}
