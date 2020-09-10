@@ -14,6 +14,7 @@ use std::collections::HashMap;
 
 // Use internal modules
 use crate::model::artist::Artist;
+use crate::model::album::Album;
 use crate::auth::TidalCredentials;
 
 // Possible errors returned from `rstidal` client.
@@ -80,7 +81,7 @@ impl Tidal {
         }
     }
 
-    pub fn session_id(&self) -> String {
+    fn session_id(&self) -> String {
         let credentials = self.credentials.clone();
         let session_id = match &credentials.session_info {
             None => panic!("A session needs to be obtained before using Tidal"),
@@ -94,11 +95,11 @@ impl Tidal {
         session_id.to_owned()
     }
 
-    pub fn country_code(&self) -> String {
+    fn country_code(&self) -> String {
         self.credentials.session_info.as_ref().unwrap().country_code.to_owned()
     }
 
-    pub async fn api_call(&self, method: Method, url: &str, payload: Option<&Value>) -> ClientResult<String> {
+    async fn api_call(&self, method: Method, url: &str, payload: Option<&Value>) -> ClientResult<String> {
         #[cfg(not(test))]
         let base_url: &str = "https://api.tidalhifi.com/v1";
         #[cfg(test)]
@@ -157,10 +158,16 @@ impl Tidal {
     //pub async fn delete(&self, url: &str, payload: &Value) -> ClientResult<String> {
         //self.api_call(Method::DELETE, url, Some(payload)).await
     //}
-    pub async fn artist(&self, artist_id: &str) -> ClientResult<Artist> {
-        let url = format!("/artists/{}", artist_id);
+    pub async fn artist(&self, id: &str) -> ClientResult<Artist> {
+        let url = format!("/artists/{}", id);
         let result = self.get(&url, &mut HashMap::new()).await?;
         Self::convert_result::<Artist>(&result)
+    }
+
+    pub async fn album(&self, id: &str) -> ClientResult<Album> {
+        let url = format!("/albums/{}", id);
+        let result = self.get(&url, &mut HashMap::new()).await?;
+        Self::convert_result::<Album>(&result)
     }
 
     fn convert_result<'a, T: Deserialize<'a>>(input: &'a str) -> ClientResult<T> {
@@ -173,7 +180,6 @@ mod tests {
     use super::*;
     use mockito::mock;
     use crate::auth::SessionInfo;
-    use crate::model::artist::ArtistType;
 
     #[tokio::test]
     async fn client_get() {
@@ -203,13 +209,28 @@ mod tests {
         let expected_result = Artist {
             id: Some(37312),
             name: Some("myband".to_owned()),
-            artist_types: Some(vec!(ArtistType::Artist)),
-            url: Some("http://www.tidal.com/artist/37312".to_owned()),
-            picture: Some("8cd9716d-0206-46a6-a70a-7dc2e427d11b".to_owned()),
-            popularity: Some(43)
+            ..Default::default()
         };
         assert_eq!(result.id, expected_result.id);
         assert_eq!(result.name, expected_result.name);
+    }
+
+    #[tokio::test]
+    async fn client_album() {
+        let _mock = mock_request_success_from_file(
+            "GET",
+            "/albums/79914998?countryCode=US",
+            "tests/files/album.json"
+        );
+
+        let result: Album = client().album("79914998").await.unwrap();
+        let expected_result = Album {
+            id: Some(79914998),
+            title: Some("My Album".to_owned()),
+            ..Default::default()
+        };
+        assert_eq!(result.id, expected_result.id);
+        assert_eq!(result.title, expected_result.title);
     }
 
     fn mock_request_success(method: &str, path: &str, body: &str) -> mockito::Mock {
