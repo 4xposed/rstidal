@@ -15,6 +15,7 @@ use std::collections::HashMap;
 // Use internal modules
 use crate::model::artist::Artist;
 use crate::model::album::Album;
+use crate::model::playlist::Playlist;
 use crate::auth::TidalCredentials;
 
 // Possible errors returned from `rstidal` client.
@@ -170,6 +171,12 @@ impl Tidal {
         Self::convert_result::<Album>(&result)
     }
 
+    pub async fn playlist(&self, id: &str) -> ClientResult<Playlist> {
+        let url = format!("/playlists/{}", id);
+        let result = self.get(&url, &mut HashMap::new()).await?;
+        Self::convert_result::<Playlist>(&result)
+    }
+
     fn convert_result<'a, T: Deserialize<'a>>(input: &'a str) -> ClientResult<T> {
         serde_json::from_str::<T>(input).map_err(Into::into)
     }
@@ -230,6 +237,24 @@ mod tests {
             ..Default::default()
         };
         assert_eq!(result.id, expected_result.id);
+        assert_eq!(result.title, expected_result.title);
+    }
+
+    #[tokio::test]
+    async fn client_playlist() {
+        let _mock = mock_request_success_from_file(
+            "GET",
+            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4?countryCode=US",
+            "tests/files/playlist.json"
+        );
+
+        let result: Playlist = client().playlist("7ce7df87-6d37-4465-80db-84535a4e44a4").await.unwrap();
+        let expected_result = Playlist {
+            uuid: Some("7ce7df87-6d37-4465-80db-84535a4e44a4".to_owned()),
+            title: Some("Metal - TIDAL Masters".to_owned()),
+            ..Default::default()
+        };
+        assert_eq!(result.uuid, expected_result.uuid);
         assert_eq!(result.title, expected_result.title);
     }
 

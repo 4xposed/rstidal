@@ -1,0 +1,42 @@
+{
+  "uuid": "7ce7df87-6d37-4465-80db-84535a4e44a4",
+  "title": "Metal - TIDAL Masters",
+  "numberOfTracks": 25,
+  "numberOfVideos": 0,
+  "creator": {
+    "id": 0
+  },
+  "description": "Listen to master quality versions of the best Metal tracks -- only on TIDAL. \n\nWith TIDAL Masters playlists we highlight the very best examples of Master Quality Authenticated recordings, curated to get the most out of your stereo, your headphones and your TIDAL HiFi membership. Hear the difference. (Cover: Slipknot / Photo: Rovi)",
+  "duration": 6075,
+  "lastUpdated": "2020-07-18T10:55:41.048+0000",
+  "created": "2019-03-06T22:30:43.050+0000",
+  "type": "EDITORIAL",
+  "publicPlaylist": true,
+  "url": "http://www.tidal.com/playlist/7ce7df87-6d37-4465-80db-84535a4e44a4",
+  "image": "cd26ed5b-91d7-47a7-bc43-2234f1ac2161",
+  "popularity": 0,
+  "squareImage": "5288184b-fbca-4d28-8cdd-db258a11d801",
+  "promotedArtists": [
+    {
+      "id": 37312,
+      "name": "Trivium",
+      "type": "MAIN"
+    },
+    {
+      "id": 3635103,
+      "name": "Asking Alexandria",
+      "type": "MAIN"
+    },
+    {
+      "id": 4086506,
+      "name": "Full Of Hell",
+      "type": "MAIN"
+    },
+    {
+      "id": 3571162,
+      "name": "Health",
+      "type": "MAIN"
+    }
+  ],
+  "lastItemAddedAt": "2020-07-18T10:55:40.744+0000"
+}
