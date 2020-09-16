@@ -12,3 +12,17 @@ pub enum ModelType {
     Editorial,
     Main
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "UPPERCASE")]
+pub enum AudioMode {
+    Stereo
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "UPPERCASE")]
+pub enum AudioQuality {
+    Lossless,
+    #[serde(rename = "HI_RES")]
+    HiRes
+}

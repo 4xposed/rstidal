@@ -3,19 +3,7 @@ use serde::{Deserialize, Serialize};
 
 // Use local
 use crate::model::artist::Artist;
-use crate::model::ModelType;
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "UPPERCASE")]
-pub enum VideoMode {
-    Stereo
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "UPPERCASE")]
-pub enum AudioQuality {
-    Lossless
-}
+use crate::model::{ModelType, AudioMode, AudioQuality};
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -40,7 +28,7 @@ pub struct Album {
     pub upc: Option<String>,
     pub popularity: Option<u8>,
     pub audio_quality: Option<AudioQuality>,
-    pub audio_modes: Option<Vec<VideoMode>>,
+    pub audio_modes: Option<Vec<AudioMode>>,
     pub artists: Option<Vec<Artist>>,
     #[serde(rename = "type")]
     pub _type: Option<ModelType>,
