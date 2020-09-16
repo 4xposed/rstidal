@@ -8,6 +8,9 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  RSTIDAL_APP_TOKEN: ${{ secrets.RSTIDAL_APP_TOKEN }}
+  RSTIDAL_USERNAME: ${{ secrets.RSTIDAL_USERNAME }}
+  RSTIDAL_PASSWORD: ${{ secrets.RSTIDAL_PASSWORD }}
 
 jobs:
   build:
