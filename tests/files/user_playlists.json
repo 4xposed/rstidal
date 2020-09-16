@@ -1,0 +1,28 @@
+{
+  "limit": 10,
+  "offset": 0,
+  "totalNumberOfItems": 1,
+  "items": [
+    {
+      "uuid": "8edf5a89-fec4-4aa3-80ab-9e00a83633a2",
+      "title": "roadtrip",
+      "numberOfTracks": 1,
+      "numberOfVideos": 0,
+      "creator": {
+        "id": 173393682
+      },
+      "description": "",
+      "duration": 792,
+      "lastUpdated": "2020-09-16T15:56:12.730+0000",
+      "created": "2020-09-16T15:55:58.677+0000",
+      "type": "USER",
+      "publicPlaylist": false,
+      "url": "http://www.tidal.com/playlist/8edf5a89-fec4-4aa3-80ab-9e00a83633a2",
+      "image": "1ef27181-b624-4d8b-846d-e7ecdc2d1557",
+      "popularity": 0,
+      "squareImage": "d6fe9827-b5a2-4a74-8669-06cd9155e489",
+      "promotedArtists": [],
+      "lastItemAddedAt": "2020-09-16T15:56:12.730+0000"
+    }
+  ]
+}

@@ -106,6 +106,10 @@ impl Tidal {
         self.credentials.session_info.as_ref().unwrap().country_code.to_owned()
     }
 
+    fn user_id(&self) -> u32 {
+        self.credentials.session_info.as_ref().unwrap().user_id.unwrap()
+    }
+
     async fn api_call(&self, method: Method, url: &str, payload: Option<&Value>) -> ClientResult<String> {
         #[cfg(not(test))]
         let base_url: &str = "https://api.tidalhifi.com/v1";
@@ -195,6 +199,14 @@ impl Tidal {
         let url = format!("/playlists/{}", id);
         let result = self.get(&url, &mut HashMap::new()).await?;
         Self::convert_result::<Playlist>(&result)
+    }
+
+    pub async fn user_playlists(&self) -> ClientResult<Vec<Playlist>> {
+        let user_id = self.user_id();
+        let url = format!("/users/{}/playlists", user_id);
+        let result = self.get(&url, &mut HashMap::new()).await?;
+        let playlists = Self::convert_result::<TidalItems<Playlist>>(&result)?.items;
+        Ok(playlists)
     }
 
     pub async fn playlist_tracks(&self, id: &str) -> ClientResult<Vec<Track>> {
@@ -317,6 +329,24 @@ mod tests {
         };
         assert_eq!(result.uuid, expected_result.uuid);
         assert_eq!(result.title, expected_result.title);
+    }
+
+    #[tokio::test]
+    async fn client_user_playlists() {
+        let _mock = mock_request_success_from_file(
+            "GET",
+            "/users/1234/playlists?countryCode=US",
+            "tests/files/user_playlists.json"
+        );
+
+        let result: Vec<Playlist> = client().user_playlists().await.unwrap();
+        let expected_result = Playlist {
+            uuid: Some("8edf5a89-fec4-4aa3-80ab-9e00a83633a2".to_owned()),
+            title: Some("roadtrip".to_owned()),
+            ..Default::default()
+        };
+        assert_eq!(result[0].uuid, expected_result.uuid);
+        assert_eq!(result[0].title, expected_result.title);
     }
 
     #[tokio::test]

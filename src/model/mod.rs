@@ -11,7 +11,8 @@ pub enum ModelType {
     Album,
     Artist,
     Editorial,
-    Main
+    Main,
+    User
 }
 
 #[derive(Debug, Serialize, Deserialize)]
