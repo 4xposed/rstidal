@@ -1,0 +1,387 @@
+{
+  "limit": 10,
+  "offset": 0,
+  "totalNumberOfItems": 19,
+  "items": [
+    {
+      "id": 138458220,
+      "title": "What The Dead Men Say",
+      "duration": 2793,
+      "streamReady": true,
+      "streamStartDate": "2020-04-24T00:00:00.000+0000",
+      "allowStreaming": true,
+      "premiumStreamingOnly": false,
+      "numberOfTracks": 10,
+      "numberOfVideos": 0,
+      "numberOfVolumes": 1,
+      "releaseDate": "2020-04-24",
+      "copyright": "2020 Roadrunner Records",
+      "type": "ALBUM",
+      "version": null,
+      "url": "http://www.tidal.com/album/138458220",
+      "cover": "404d8a74-e8d5-4586-914f-d1ffddc2377e",
+      "videoCover": null,
+      "explicit": true,
+      "upc": "075679826787",
+      "popularity": 19,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ]
+    },
+    {
+      "id": 79914998,
+      "title": "The Sin and the Sentence",
+      "duration": 3436,
+      "streamReady": true,
+      "streamStartDate": "2017-10-20T00:00:00.000+0000",
+      "allowStreaming": true,
+      "premiumStreamingOnly": false,
+      "numberOfTracks": 11,
+      "numberOfVideos": 0,
+      "numberOfVolumes": 1,
+      "releaseDate": "2017-10-20",
+      "copyright": "© 2017 Roadrunner Records, Inc.",
+      "type": "ALBUM",
+      "version": null,
+      "url": "http://www.tidal.com/album/79914998",
+      "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+      "videoCover": null,
+      "explicit": true,
+      "upc": "016861744601",
+      "popularity": 20,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ]
+    },
+    {
+      "id": 79915010,
+      "title": "The Sin and the Sentence",
+      "duration": 3435,
+      "streamReady": true,
+      "streamStartDate": "2017-10-20T00:00:00.000+0000",
+      "allowStreaming": true,
+      "premiumStreamingOnly": false,
+      "numberOfTracks": 11,
+      "numberOfVideos": 0,
+      "numberOfVolumes": 1,
+      "releaseDate": "2017-10-20",
+      "copyright": "© 2017 Roadrunner Records, Inc.",
+      "type": "ALBUM",
+      "version": null,
+      "url": "http://www.tidal.com/album/79915010",
+      "cover": "d3cb6f92-7e2d-4727-beea-359e15df530b",
+      "videoCover": null,
+      "explicit": true,
+      "upc": "016861744632",
+      "popularity": 14,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ]
+    },
+    {
+      "id": 51751824,
+      "title": "Silence in the Snow",
+      "duration": 2592,
+      "streamReady": true,
+      "streamStartDate": "2015-10-02T00:00:00.000+0000",
+      "allowStreaming": true,
+      "premiumStreamingOnly": false,
+      "numberOfTracks": 11,
+      "numberOfVideos": 0,
+      "numberOfVolumes": 1,
+      "releaseDate": "2015-10-02",
+      "copyright": "© 2015 Roadrunner Records, Inc.",
+      "type": "ALBUM",
+      "version": null,
+      "url": "http://www.tidal.com/album/51751824",
+      "cover": "21c64e5b-337b-4ce4-805a-b337e107e999",
+      "videoCover": null,
+      "explicit": true,
+      "upc": "016861750206",
+      "popularity": 12,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ]
+    },
+    {
+      "id": 68571645,
+      "title": "Silence in the Snow",
+      "duration": 2593,
+      "streamReady": true,
+      "streamStartDate": "2015-10-02T00:00:00.000+0000",
+      "allowStreaming": true,
+      "premiumStreamingOnly": false,
+      "numberOfTracks": 11,
+      "numberOfVideos": 0,
+      "numberOfVolumes": 1,
+      "releaseDate": "2015-10-02",
+      "copyright": "© 2015 Roadrunner Records, Inc.",
+      "type": "ALBUM",
+      "version": null,
+      "url": "http://www.tidal.com/album/68571645",
+      "cover": "834ca33a-5983-489a-872a-fc7dd9171b26",
+      "videoCover": null,
+      "explicit": true,
+      "upc": "016861750237",
+      "popularity": 7,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ]
+    },
+    {
+      "id": 51751742,
+      "title": "Silence in the Snow (Special Edition)",
+      "duration": 3179,
+      "streamReady": true,
+      "streamStartDate": "2015-10-02T00:00:00.000+0000",
+      "allowStreaming": true,
+      "premiumStreamingOnly": false,
+      "numberOfTracks": 13,
+      "numberOfVideos": 0,
+      "numberOfVolumes": 1,
+      "releaseDate": "2015-10-02",
+      "copyright": "© 2015 Roadrunner Records",
+      "type": "ALBUM",
+      "version": null,
+      "url": "http://www.tidal.com/album/51751742",
+      "cover": "38325dc1-397b-4e4e-902a-c48b764fe6d5",
+      "videoCover": null,
+      "explicit": true,
+      "upc": "016861750299",
+      "popularity": 17,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ]
+    },
+    {
+      "id": 22812791,
+      "title": "Vengeance Falls",
+      "duration": 2872,
+      "streamReady": true,
+      "streamStartDate": "2013-10-15T00:00:00.000+0000",
+      "allowStreaming": true,
+      "premiumStreamingOnly": false,
+      "numberOfTracks": 10,
+      "numberOfVideos": 0,
+      "numberOfVolumes": 1,
+      "releaseDate": "2013-10-14",
+      "copyright": "2013 Roadrunner Records, Inc.",
+      "type": "ALBUM",
+      "version": null,
+      "url": "http://www.tidal.com/album/22812791",
+      "cover": "29c6c32f-7589-4ba7-9714-a1a03314ffec",
+      "videoCover": null,
+      "explicit": false,
+      "upc": "016861760106",
+      "popularity": 6,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ]
+    },
+    {
+      "id": 68573401,
+      "title": "Vengeance Falls",
+      "duration": 3673,
+      "streamReady": true,
+      "streamStartDate": "2014-06-02T00:00:00.000+0000",
+      "allowStreaming": true,
+      "premiumStreamingOnly": false,
+      "numberOfTracks": 13,
+      "numberOfVideos": 0,
+      "numberOfVolumes": 1,
+      "releaseDate": "2013-10-14",
+      "copyright": "2013 Roadrunner Records, Inc.",
+      "type": "ALBUM",
+      "version": null,
+      "url": "http://www.tidal.com/album/68573401",
+      "cover": "0ee6a605-de47-40f5-b868-dceb55635e8c",
+      "videoCover": null,
+      "explicit": false,
+      "upc": "016861760182",
+      "popularity": 6,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ]
+    },
+    {
+      "id": 22833011,
+      "title": "Vengeance Falls (Special Edition)",
+      "duration": 3673,
+      "streamReady": true,
+      "streamStartDate": "2013-10-15T00:00:00.000+0000",
+      "allowStreaming": true,
+      "premiumStreamingOnly": false,
+      "numberOfTracks": 13,
+      "numberOfVideos": 0,
+      "numberOfVolumes": 1,
+      "releaseDate": "2013-10-14",
+      "copyright": "2013 Roadrunner Records, Inc.",
+      "type": "ALBUM",
+      "version": null,
+      "url": "http://www.tidal.com/album/22833011",
+      "cover": "4884874d-ca46-4923-ad38-a2f8f5edcad9",
+      "videoCover": null,
+      "explicit": false,
+      "upc": "016861760199",
+      "popularity": 12,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ]
+    },
+    {
+      "id": 7460026,
+      "title": "In Waves",
+      "duration": 3086,
+      "streamReady": true,
+      "streamStartDate": "2013-01-29T00:00:00.000+0000",
+      "allowStreaming": true,
+      "premiumStreamingOnly": false,
+      "numberOfTracks": 13,
+      "numberOfVideos": 0,
+      "numberOfVolumes": 1,
+      "releaseDate": "2011-08-09",
+      "copyright": "2011 The All Blacks B.V.",
+      "type": "ALBUM",
+      "version": null,
+      "url": "http://www.tidal.com/album/7460026",
+      "cover": "175d9087-7fab-4b8b-9760-9a99039d9030",
+      "videoCover": null,
+      "explicit": false,
+      "upc": "016861775605",
+      "popularity": 7,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,472 @@
+{
+  "limit": 10,
+  "offset": 0,
+  "totalNumberOfItems": 25,
+  "items": [
+    {
+      "id": 147855096,
+      "title": "FULL OF HEALTH",
+      "duration": 136,
+      "replayGain": -9.2,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2020-07-15T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 1,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 3,
+      "copyright": "℗ 2020 Loma Vista Recordings., Distributed by Concord.",
+      "description": null,
+      "url": "http://www.tidal.com/track/147855096",
+      "isrc": "USC4R2003376",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 3571162,
+        "name": "Health",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 3571162,
+          "name": "Health",
+          "type": "MAIN"
+        },
+        {
+          "id": 4086506,
+          "name": "Full Of Hell",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 147855095,
+        "title": "FULL OF HEALTH",
+        "cover": "9fee9cc9-ed23-43af-b18b-e77be153dfe9",
+        "videoCover": null,
+        "releaseDate": "2020-07-15"
+      },
+      "dateAdded": "2020-07-18T10:55:40.744+0000",
+      "index": 6250
+    },
+    {
+      "id": 138803262,
+      "title": "House On Fire",
+      "duration": 213,
+      "replayGain": -10.13,
+      "peak": 0.999934,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2020-05-11T14:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 1,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 7,
+      "copyright": "2020 Sumerian Records",
+      "description": null,
+      "url": "http://www.tidal.com/track/138803262",
+      "isrc": "USYFZ2031601",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 3635103,
+        "name": "Asking Alexandria",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 3635103,
+          "name": "Asking Alexandria",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 138803261,
+        "title": "House On Fire",
+        "cover": "5edde593-2378-456a-8682-d4e26fb169ae",
+        "videoCover": null,
+        "releaseDate": "2020-05-11"
+      },
+      "dateAdded": "2020-05-14T11:41:22.487+0000",
+      "index": 12500
+    },
+    {
+      "id": 138458225,
+      "title": "Bleed Into Me",
+      "duration": 229,
+      "replayGain": -10.39,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2020-04-22T10:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 5,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 11,
+      "copyright": "2020 Roadrunner Records",
+      "description": null,
+      "url": "http://www.tidal.com/track/138458225",
+      "isrc": "NLA322000011",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 138458220,
+        "title": "What The Dead Men Say",
+        "cover": "404d8a74-e8d5-4586-914f-d1ffddc2377e",
+        "videoCover": null,
+        "releaseDate": "2020-04-24"
+      },
+      "dateAdded": "2020-05-14T11:41:22.487+0000",
+      "index": 25000
+    },
+    {
+      "id": 131916904,
+      "title": "Autumn and Carbine",
+      "duration": 208,
+      "replayGain": -13.89,
+      "peak": 0.999939,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2020-03-13T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 11,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 5,
+      "copyright": "℗ 2020 Roadrunner Records",
+      "description": null,
+      "url": "http://www.tidal.com/track/131916904",
+      "isrc": "NLA321900280",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 7706585,
+        "name": "Code Orange",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 7706585,
+          "name": "Code Orange",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 131916884,
+        "title": "Underneath",
+        "cover": "70379550-f3e1-4683-af35-d43a9685f054",
+        "videoCover": null,
+        "releaseDate": "2020-03-13"
+      },
+      "dateAdded": "2020-05-14T11:41:22.487+0000",
+      "index": 37500
+    },
+    {
+      "id": 128077293,
+      "title": "Dressed Up For Evil",
+      "duration": 281,
+      "replayGain": -9.48,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2020-01-17T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 1,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 6,
+      "copyright": "℗ 2019 Silver Lining Music Ltd.",
+      "description": null,
+      "url": "http://www.tidal.com/track/128077293",
+      "isrc": "UKKY81900200",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37260,
+        "name": "Annihilator",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37260,
+          "name": "Annihilator",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 128077292,
+        "title": "Dressed Up For Evil",
+        "cover": "8dbb747a-222d-442f-8be2-f124ef49c722",
+        "videoCover": null,
+        "releaseDate": "2020-01-17"
+      },
+      "dateAdded": "2020-01-20T13:28:47.316+0000",
+      "index": 50000
+    },
+    {
+      "id": 108651411,
+      "title": "Throw Me an Anchor",
+      "duration": 241,
+      "replayGain": -11.93,
+      "peak": 0.91147,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2019-05-15T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 1,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 7,
+      "copyright": "2019 Abraxan Hymns",
+      "description": null,
+      "url": "http://www.tidal.com/track/108651411",
+      "isrc": "QM3T41800007",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 3638398,
+        "name": "Baroness",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 3638398,
+          "name": "Baroness",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 108651410,
+        "title": "Throw Me an Anchor",
+        "cover": "92064319-2262-4b32-b96d-a5d2d24fee1b",
+        "videoCover": null,
+        "releaseDate": "2019-05-15"
+      },
+      "dateAdded": "2019-05-21T12:59:55.496+0000",
+      "index": 100000
+    },
+    {
+      "id": 109254415,
+      "title": "Unsainted",
+      "duration": 260,
+      "replayGain": -10.69,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2019-05-16T10:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 1,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 31,
+      "copyright": "2019 Roadrunner Records, Inc.",
+      "description": null,
+      "url": "http://www.tidal.com/track/109254415",
+      "isrc": "NLA321900089",
+      "editable": false,
+      "explicit": true,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37277,
+        "name": "Slipknot",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37277,
+          "name": "Slipknot",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 109254414,
+        "title": "Unsainted",
+        "cover": "d3ab2045-3820-4d62-a787-1c3138b96d9b",
+        "videoCover": null,
+        "releaseDate": "2019-05-16"
+      },
+      "dateAdded": "2019-05-21T13:00:12.160+0000",
+      "index": 200000
+    },
+    {
+      "id": 108425901,
+      "title": "Drowning in the Sound",
+      "duration": 223,
+      "replayGain": -9.75,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2019-05-17T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 1,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 15,
+      "copyright": "℗ 2019 Roadrunner Records",
+      "description": null,
+      "url": "http://www.tidal.com/track/108425901",
+      "isrc": "NLA321900049",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 108425900,
+        "title": "Drowning in the Sound",
+        "cover": "590d0d5b-054e-4e17-8f69-b0542e9993af",
+        "videoCover": null,
+        "releaseDate": "2019-05-17"
+      },
+      "dateAdded": "2019-05-21T13:00:21.985+0000",
+      "index": 300000
+    },
+    {
+      "id": 119894190,
+      "title": "The In-Between",
+      "duration": 255,
+      "replayGain": -11.05,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2020-01-22T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 1,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 10,
+      "copyright": "℗ 2020 Atlantic Recording Corporation for the United States and WEA International Inc. for the world outside of the United States. All Rights Reserved.",
+      "description": null,
+      "url": "http://www.tidal.com/track/119894190",
+      "isrc": "NLA321900190",
+      "editable": false,
+      "explicit": true,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 3569545,
+        "name": "In This Moment",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 3569545,
+          "name": "In This Moment",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 119894189,
+        "title": "The In-Between",
+        "cover": "eb11d3db-7eec-40d7-b71d-a73c60e65b3c",
+        "videoCover": null,
+        "releaseDate": "2020-01-22"
+      },
+      "dateAdded": "2020-01-29T13:46:29.994+0000",
+      "index": 750000
+    },
+    {
+      "id": 126406929,
+      "title": "Set Me Free",
+      "duration": 381,
+      "replayGain": -5.42,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2020-01-17T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 1,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 14,
+      "copyright": "℗ 2020 Warner Records Inc.",
+      "description": null,
+      "url": "http://www.tidal.com/track/126406929",
+      "isrc": "USWB11902640",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "HI_RES",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 14155,
+        "name": "Avenged Sevenfold",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 14155,
+          "name": "Avenged Sevenfold",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 126406928,
+        "title": "Set Me Free",
+        "cover": "8db7587c-8159-44ab-bba0-36bd090e0276",
+        "videoCover": null,
+        "releaseDate": "2020-01-17"
+      },
+      "dateAdded": "2020-01-29T13:47:00.213+0000",
+      "index": 1950000
+    }
+  ]
+}

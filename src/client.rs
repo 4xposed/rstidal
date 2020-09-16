@@ -16,6 +16,7 @@ use std::collections::HashMap;
 use crate::model::artist::Artist;
 use crate::model::album::Album;
 use crate::model::playlist::Playlist;
+use crate::model::track::Track;
 use crate::auth::TidalCredentials;
 
 // Possible errors returned from `rstidal` client.
@@ -62,6 +63,11 @@ pub enum ApiError {
 }
 
 type ClientResult<T> = Result<T, ClientError>;
+
+#[derive(Default, Debug, Deserialize)]
+pub struct TidalItems<T> {
+    pub items: Vec<T>
+}
 
 // Tidal API
 pub struct Tidal {
@@ -165,16 +171,37 @@ impl Tidal {
         Self::convert_result::<Artist>(&result)
     }
 
+    pub async fn artist_albums(&self, id: &str) -> ClientResult<Vec<Album>> {
+        let url = format!("/artists/{}/albums", id);
+        let result = self.get(&url, &mut HashMap::new()).await?;
+        let albums = Self::convert_result::<TidalItems<Album>>(&result)?.items;
+        Ok(albums)
+    }
+
     pub async fn album(&self, id: &str) -> ClientResult<Album> {
         let url = format!("/albums/{}", id);
         let result = self.get(&url, &mut HashMap::new()).await?;
         Self::convert_result::<Album>(&result)
     }
 
+    pub async fn album_tracks(&self, id: &str) -> ClientResult<Vec<Track>> {
+        let url = format!("/albums/{}/tracks", id);
+        let result = self.get(&url, &mut HashMap::new()).await?;
+        let tracks = Self::convert_result::<TidalItems<Track>>(&result)?.items;
+        Ok(tracks)
+    }
+
     pub async fn playlist(&self, id: &str) -> ClientResult<Playlist> {
         let url = format!("/playlists/{}", id);
         let result = self.get(&url, &mut HashMap::new()).await?;
         Self::convert_result::<Playlist>(&result)
+    }
+
+    pub async fn playlist_tracks(&self, id: &str) -> ClientResult<Vec<Track>> {
+        let url = format!("/playlists/{}/tracks", id);
+        let result = self.get(&url, &mut HashMap::new()).await?;
+        let tracks = Self::convert_result::<TidalItems<Track>>(&result)?.items;
+        Ok(tracks)
     }
 
     fn convert_result<'a, T: Deserialize<'a>>(input: &'a str) -> ClientResult<T> {
@@ -223,6 +250,24 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn client_artist_albums() {
+        let _mock = mock_request_success_from_file(
+            "GET",
+            "/artists/37312/albums?countryCode=US",
+            "tests/files/artist_albums.json"
+        );
+
+        let result: Vec<Album> = client().artist_albums("37312").await.unwrap();
+        let expected_first_result = Album {
+            id: Some(138458220),
+            title: Some("What The Dead Men Say".to_owned()),
+            ..Default::default()
+        };
+        assert_eq!(result[0].id, expected_first_result.id);
+        assert_eq!(result[0].title, expected_first_result.title);
+    }
+
+    #[tokio::test]
     async fn client_album() {
         let _mock = mock_request_success_from_file(
             "GET",
@@ -241,6 +286,22 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn client_album_tracks() {
+        let _mock = mock_request_success_from_file(
+            "GET",
+            "/albums/79914998/tracks?countryCode=US",
+            "tests/files/album_tracks.json"
+        );
+
+        let result: Vec<Track> = client().album_tracks("79914998").await.unwrap();
+        let expected_first_result = Track {
+            title: Some("The Sin and the Sentence".to_owned()),
+            ..Default::default()
+        };
+        assert_eq!(result[0].title, expected_first_result.title);
+    }
+
+    #[tokio::test]
     async fn client_playlist() {
         let _mock = mock_request_success_from_file(
             "GET",
@@ -256,6 +317,22 @@ mod tests {
         };
         assert_eq!(result.uuid, expected_result.uuid);
         assert_eq!(result.title, expected_result.title);
+    }
+
+    #[tokio::test]
+    async fn client_playlist_tracks() {
+        let _mock = mock_request_success_from_file(
+            "GET",
+            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4/tracks?countryCode=US",
+            "tests/files/playlist_tracks.json"
+        );
+
+        let result: Vec<Track> = client().playlist_tracks("7ce7df87-6d37-4465-80db-84535a4e44a4").await.unwrap();
+        let expected_first_result = Track {
+            title: Some("FULL OF HEALTH".to_owned()),
+            ..Default::default()
+        };
+        assert_eq!(result[0].title, expected_first_result.title);
     }
 
     fn mock_request_success(method: &str, path: &str, body: &str) -> mockito::Mock {

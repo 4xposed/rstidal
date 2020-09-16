@@ -1,6 +1,7 @@
 pub mod artist;
 pub mod album;
 pub mod playlist;
+pub mod track;
 
 use serde::{Deserialize, Serialize};
 

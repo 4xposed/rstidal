@@ -1,0 +1,469 @@
+{
+  "limit": 11,
+  "offset": 0,
+  "totalNumberOfItems": 11,
+  "items": [
+    {
+      "id": 79914999,
+      "title": "The Sin and the Sentence",
+      "duration": 349,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-08-24T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 1,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 7,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79914999",
+      "isrc": "NLA321700251",
+      "editable": false,
+      "explicit": true,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    },
+    {
+      "id": 79915000,
+      "title": "Beyond Oblivion",
+      "duration": 316,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-10-20T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 2,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 8,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79915000",
+      "isrc": "NLA321700254",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    },
+    {
+      "id": 79915001,
+      "title": "Other Worlds",
+      "duration": 289,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-10-20T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 3,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 3,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79915001",
+      "isrc": "NLA321700255",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    },
+    {
+      "id": 79915002,
+      "title": "The Heart from Your Hate",
+      "duration": 243,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-08-24T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 4,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 10,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79915002",
+      "isrc": "NLA321700256",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    },
+    {
+      "id": 79915003,
+      "title": "Betrayer",
+      "duration": 327,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-10-16T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 5,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 4,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79915003",
+      "isrc": "NLA321700257",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    },
+    {
+      "id": 79915004,
+      "title": "The Wretchedness Inside",
+      "duration": 331,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-10-20T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 6,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 4,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79915004",
+      "isrc": "NLA321700258",
+      "editable": false,
+      "explicit": true,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    },
+    {
+      "id": 79915005,
+      "title": "Endless Night",
+      "duration": 218,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-10-20T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 7,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 4,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79915005",
+      "isrc": "NLA321700259",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    },
+    {
+      "id": 79915006,
+      "title": "Sever the Hand",
+      "duration": 325,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-10-20T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 8,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 2,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79915006",
+      "isrc": "NLA321700260",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    },
+    {
+      "id": 79915007,
+      "title": "Beauty in the Sorrow",
+      "duration": 271,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-10-20T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 9,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 2,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79915007",
+      "isrc": "NLA321700261",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    },
+    {
+      "id": 79915008,
+      "title": "The Revanchist",
+      "duration": 437,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-10-20T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 10,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 2,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79915008",
+      "isrc": "NLA321700262",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    },
+    {
+      "id": 79915009,
+      "title": "Thrown into the Fire",
+      "duration": 329,
+      "replayGain": -11.67,
+      "peak": 1.0,
+      "allowStreaming": true,
+      "streamReady": true,
+      "streamStartDate": "2017-10-20T00:00:00.000+0000",
+      "premiumStreamingOnly": false,
+      "trackNumber": 11,
+      "volumeNumber": 1,
+      "version": null,
+      "popularity": 6,
+      "copyright": "℗ 2017 Roadrunner Records, Inc.",
+      "url": "http://www.tidal.com/track/79915009",
+      "isrc": "NLA321700263",
+      "editable": false,
+      "explicit": false,
+      "audioQuality": "LOSSLESS",
+      "audioModes": [
+        "STEREO"
+      ],
+      "artist": {
+        "id": 37312,
+        "name": "Trivium",
+        "type": "MAIN"
+      },
+      "artists": [
+        {
+          "id": 37312,
+          "name": "Trivium",
+          "type": "MAIN"
+        }
+      ],
+      "album": {
+        "id": 79914998,
+        "title": "The Sin and the Sentence",
+        "cover": "579664d3-836e-4170-a46e-cbd2ed404f47",
+        "videoCover": null
+      }
+    }
+  ]
+}
