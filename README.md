@@ -1,3 +1,7 @@
+![Rust](https://github.com/4xposed/rstidal/workflows/Rust/badge.svg?branch=master)
+[![Crates.io](https://img.shields.io/crates/v/rstidal.svg)](https://crates.io/crates/rstidal)
+[![Docs](https://docs.rs/rstidal/badge.svg)](https://docs.rs/crate/rstidal/)
+
 # Rstidal
 
 Unofficial Rust API wrapper for TIDAL music streaming service. Inspired by [rspotify](https://github.com/ramsayleung/rspotify)
