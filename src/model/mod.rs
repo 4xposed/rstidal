@@ -1,5 +1,5 @@
-pub mod artist;
 pub mod album;
+pub mod artist;
 pub mod playlist;
 pub mod track;
 
@@ -12,13 +12,20 @@ pub enum ModelType {
     Artist,
     Editorial,
     Main,
-    User
+    User,
+    Podcast,
+    Contributor,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "UPPERCASE")]
 pub enum AudioMode {
-    Stereo
+    Mono,
+    Stereo,
+    #[serde(rename = "SONY_360RA")]
+    Sony360RealityAudio,
+    #[serde(rename = "DOLBY_ATMOS")]
+    DolbyAtmos,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -26,5 +33,7 @@ pub enum AudioMode {
 pub enum AudioQuality {
     Lossless,
     #[serde(rename = "HI_RES")]
-    HiRes
+    Master,
+    High,
+    Low,
 }

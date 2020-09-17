@@ -8,7 +8,7 @@ use crate::model::ModelType;
 #[serde(rename_all = "UPPERCASE")]
 pub enum ArtistType {
     Artist,
-    Contributor
+    Contributor,
 }
 
 #[derive(Default, Debug, Serialize, Deserialize)]
@@ -21,5 +21,5 @@ pub struct Artist {
     pub picture: Option<String>,
     pub popularity: Option<u16>,
     #[serde(rename = "type")]
-    pub _type: Option<ModelType>
+    pub _type: Option<ModelType>,
 }

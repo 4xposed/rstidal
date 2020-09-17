@@ -12,7 +12,7 @@ use std::collections::HashMap;
 #[derive(Clone, Debug)]
 pub struct TidalCredentials {
     pub token: String,
-    pub session_info: Option<SessionInfo>
+    pub session_info: Option<SessionInfo>,
 }
 
 impl TidalCredentials {
@@ -20,7 +20,7 @@ impl TidalCredentials {
     pub fn new(token: &str) -> Self {
         Self {
             token: token.to_owned(),
-            session_info: None
+            session_info: None,
         }
     }
 
@@ -38,14 +38,10 @@ impl TidalCredentials {
         let token = self.token.to_owned();
         let mut session_info = match self.session_info {
             Some(ref session_info) => session_info.to_owned(),
-            None => SessionInfo::new()
+            None => SessionInfo::new(),
         };
 
-        let session = session_info.get_session(
-            &token,
-            username,
-            password
-        ).await;
+        let session = session_info.get_session(&token, username, password).await;
 
         if let Some(session) = session {
             session_info = session
@@ -69,7 +65,7 @@ impl TidalCredentials {
 pub struct SessionInfo {
     pub user_id: Option<u32>,
     pub session_id: Option<String>,
-    pub country_code: String
+    pub country_code: String,
 }
 
 impl SessionInfo {
@@ -77,7 +73,7 @@ impl SessionInfo {
         Self {
             user_id: None,
             session_id: None,
-            country_code: String::new()
+            country_code: String::new(),
         }
     }
 
@@ -109,13 +105,14 @@ impl SessionInfo {
 
         if response.status().is_success() {
             debug!("response content: {:?}", response);
-            let session_info: SessionInfo = response
-                .json()
-                .await
-                .expect("Error parsing session_info");
+            let session_info: SessionInfo =
+                response.json().await.expect("Error parsing session_info");
             Some(session_info)
         } else {
-            error!("fetch session failed. token: {:?}, form: {:?}", &token, &payload);
+            error!(
+                "fetch session failed. token: {:?}, form: {:?}",
+                &token, &payload
+            );
             error!("{:?}", response);
             None
         }
@@ -151,7 +148,14 @@ mod tests {
         {
             let _mock = mock_successful_login();
             let credential_w_session = credentials.clone().create_session(username, password).await;
-            assert_eq!(credential_w_session.session_info.unwrap().session_id.is_some(), true);
+            assert_eq!(
+                credential_w_session
+                    .session_info
+                    .unwrap()
+                    .session_id
+                    .is_some(),
+                true
+            );
         }
         // Test failed login
         {
@@ -160,7 +164,6 @@ mod tests {
             assert_eq!(credential_wo_session.session_info.unwrap().session_id.is_some(), false);
         }
     }
-
 
     #[test]
     fn test_session_info_default() {
@@ -180,8 +183,9 @@ mod tests {
     fn mock_failed_login() -> mockito::Mock {
         mock("POST", "/?token=some_token")
             .with_status(401)
-            .with_body(r#"{"status": 401, "subStatus": 3001, "userMessage": "Invalid credentials"}"#)
+            .with_body(
+                r#"{"status": 401, "subStatus": 3001, "userMessage": "Invalid credentials"}"#,
+            )
             .create()
     }
-
 }

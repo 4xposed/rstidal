@@ -3,21 +3,21 @@ use serde::{Deserialize, Serialize};
 
 // Use local
 use crate::model::artist::Artist;
-use crate::model::{ModelType, AudioMode, AudioQuality};
+use crate::model::{AudioMode, AudioQuality, ModelType};
 
 #[derive(Default, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Album {
     pub id: Option<u32>,
     pub title: Option<String>,
-    pub duration: Option<u16>,
+    pub duration: Option<u32>,
     pub stream_ready: Option<bool>,
     pub stream_start_date: Option<String>,
     pub allow_streaming: Option<bool>,
     pub premium_streaming_only: Option<bool>,
-    pub number_of_tracks: Option<u8>,
-    pub number_of_videos: Option<u8>,
-    pub number_of_volumes: Option<u8>,
+    pub number_of_tracks: Option<u16>,
+    pub number_of_videos: Option<u16>,
+    pub number_of_volumes: Option<u16>,
     pub release_date: Option<String>,
     pub copyright: Option<String>,
     pub version: Option<String>,

@@ -12,11 +12,11 @@ use std::borrow::Cow;
 use std::collections::HashMap;
 
 // Use internal modules
-use crate::model::artist::Artist;
+use crate::auth::TidalCredentials;
 use crate::model::album::Album;
+use crate::model::artist::Artist;
 use crate::model::playlist::Playlist;
 use crate::model::track::Track;
-use crate::auth::TidalCredentials;
 
 // Possible errors returned from `rstidal` client.
 #[derive(Debug, Error)]
@@ -59,21 +59,29 @@ pub enum ApiError {
     Regular {
         status: u16,
         #[serde(alias = "userMessage")]
-        message: String
-    }
+        message: String,
+    },
 }
 
 type ClientResult<T> = Result<T, ClientError>;
 
 #[derive(Default, Debug, Deserialize)]
 pub struct TidalItems<T> {
-    pub items: Vec<T>
+    pub items: Vec<T>,
+}
+
+#[derive(Default, Debug, Deserialize)]
+pub struct TidalSearch {
+    pub artists: TidalItems<Artist>,
+    pub albums: TidalItems<Album>,
+    pub playlists: TidalItems<Playlist>,
+    pub tracks: TidalItems<Track>,
 }
 
 // Tidal API
 pub struct Tidal {
     client: Client,
-    credentials: TidalCredentials
+    credentials: TidalCredentials,
 }
 
 impl Tidal {
@@ -85,7 +93,7 @@ impl Tidal {
 
         Self {
             client: Client::new(),
-            credentials
+            credentials,
         }
     }
 
@@ -93,25 +101,40 @@ impl Tidal {
         let credentials = self.credentials.clone();
         let session_id = match &credentials.session_info {
             None => panic!("A session needs to be obtained before using Tidal"),
-            Some(session_info) => {
-                match &session_info.session_id {
-                    Some(session_id) => session_id,
-                    None => panic!("An active sessions needs to be obtained before using Tidal")
-                }
-            }
+            Some(session_info) => match &session_info.session_id {
+                Some(session_id) => session_id,
+                None => panic!("An active sessions needs to be obtained before using Tidal"),
+            },
         };
         session_id.to_owned()
     }
 
     fn country_code(&self) -> String {
-        self.credentials.session_info.as_ref().unwrap().country_code.to_owned()
+        self.credentials
+            .session_info
+            .as_ref()
+            .unwrap()
+            .country_code
+            .to_owned()
     }
 
     fn user_id(&self) -> u32 {
-        self.credentials.session_info.as_ref().unwrap().user_id.unwrap()
+        self.credentials
+            .session_info
+            .as_ref()
+            .unwrap()
+            .user_id
+            .unwrap()
     }
 
-    async fn api_call(&self, method: Method, url: &str, query: Option<&HashMap<String, String>>, payload: Option<&HashMap<&str, &str>>, etag: Option<String>) -> ClientResult<Response> {
+    async fn api_call(
+        &self,
+        method: Method,
+        url: &str,
+        query: Option<&HashMap<String, String>>,
+        payload: Option<&HashMap<&str, &str>>,
+        etag: Option<String>,
+    ) -> ClientResult<Response> {
         #[cfg(not(test))]
         let base_url: &str = "https://api.tidalhifi.com/v1";
         #[cfg(test)]
@@ -129,13 +152,14 @@ impl Tidal {
             headers.insert("If-None-Match", etag.parse().unwrap());
         }
 
+        // Tidal's API requires countryCode to always be passed
         let mut query_params: HashMap<String, String> = HashMap::new();
         query_params.insert("countryCode".to_owned(), self.country_code());
 
         if let Some(query) = query {
             for (key, value) in query.iter() {
                 query_params.insert(key.clone(), value.clone());
-            };
+            }
         }
 
         let response = {
@@ -164,7 +188,11 @@ impl Tidal {
 
     pub async fn etag(&self, url: &str) -> ClientResult<String> {
         // Tidal's API requires countryCode to always be passed
-        let headers = self.api_call(Method::GET, &url, None, None, None).await?.headers().clone();
+        let headers = self
+            .api_call(Method::GET, &url, None, None, None)
+            .await?
+            .headers()
+            .clone();
 
         if let Ok(etag) = headers.get("etag").unwrap().to_str() {
             Ok(etag.to_owned())
@@ -173,27 +201,67 @@ impl Tidal {
         }
     }
 
-    pub async fn get(&self, url: &str, params: &mut HashMap<String, String>) -> ClientResult<String> {
-        // Tidal's API requires countryCode to always be passed
-        self.api_call(Method::GET, &url, Some(params), None, None).await?.text().await.map_err(Into::into)
+    pub async fn get(
+        &self,
+        url: &str,
+        params: &mut HashMap<String, String>,
+    ) -> ClientResult<String> {
+        self.api_call(Method::GET, &url, Some(params), None, None)
+            .await?
+            .text()
+            .await
+            .map_err(Into::into)
     }
 
-    pub async fn post(&self, url: &str, payload: &HashMap<&str, &str>, etag: String) -> ClientResult<String> {
-        self.api_call(Method::POST, &url, None, Some(payload), Some(etag)).await?.text().await.map_err(Into::into)
+    pub async fn post(
+        &self,
+        url: &str,
+        payload: &HashMap<&str, &str>,
+        etag: String,
+    ) -> ClientResult<String> {
+        self.api_call(Method::POST, &url, None, Some(payload), Some(etag))
+            .await?
+            .text()
+            .await
+            .map_err(Into::into)
     }
 
-    pub async fn put(&self, url: &str, payload: &HashMap<&str, &str>, etag: String) -> ClientResult<String> {
-        self.api_call(Method::PUT, url, None, Some(payload), Some(etag)).await?.text().await.map_err(Into::into)
+    pub async fn put(
+        &self,
+        url: &str,
+        payload: &HashMap<&str, &str>,
+        etag: String,
+    ) -> ClientResult<String> {
+        self.api_call(Method::PUT, url, None, Some(payload), Some(etag))
+            .await?
+            .text()
+            .await
+            .map_err(Into::into)
     }
 
     //pub async fn delete(&self, url: &str, payload: &Value, etag: String) -> ClientResult<String> {
         //self.api_call(Method::DELETE, url, Some(payload), Some(etag).await
     //}
 
+    pub async fn search(&self, term: &str, limit: Option<u16>) -> ClientResult<TidalSearch> {
+        let url = "/search";
+        let limit = if let Some(limit) = limit { limit } else { 10 };
+        let mut params: HashMap<String, String> = HashMap::new();
+        params.insert("query".to_owned(), term.to_owned());
+        params.insert("limit".to_owned(), limit.to_string());
+        let result = self.get(&url, &mut params).await?;
+        Self::convert_result::<TidalSearch>(&result)
+    }
+
     pub async fn artist(&self, id: &str) -> ClientResult<Artist> {
         let url = format!("/artists/{}", id);
         let result = self.get(&url, &mut HashMap::new()).await?;
         Self::convert_result::<Artist>(&result)
+    }
+
+    pub async fn search_artist(&self, term: &str, limit: Option<u16>) -> ClientResult<Vec<Artist>> {
+        let artists = self.search(term, limit).await?.artists.items;
+        Ok(artists)
     }
 
     pub async fn artist_albums(&self, id: &str) -> ClientResult<Vec<Album>> {
@@ -209,6 +277,11 @@ impl Tidal {
         Self::convert_result::<Album>(&result)
     }
 
+    pub async fn search_album(&self, term: &str, limit: Option<u16>) -> ClientResult<Vec<Album>> {
+        let albums = self.search(term, limit).await?.albums.items;
+        Ok(albums)
+    }
+
     pub async fn album_tracks(&self, id: &str) -> ClientResult<Vec<Track>> {
         let url = format!("/albums/{}/tracks", id);
         let result = self.get(&url, &mut HashMap::new()).await?;
@@ -216,10 +289,24 @@ impl Tidal {
         Ok(tracks)
     }
 
+    pub async fn search_track(&self, term: &str, limit: Option<u16>) -> ClientResult<Vec<Track>> {
+        let tracks = self.search(term, limit).await?.tracks.items;
+        Ok(tracks)
+    }
+
     pub async fn playlist(&self, id: &str) -> ClientResult<Playlist> {
         let url = format!("/playlists/{}", id);
         let result = self.get(&url, &mut HashMap::new()).await?;
         Self::convert_result::<Playlist>(&result)
+    }
+
+    pub async fn search_playlist(
+        &self,
+        term: &str,
+        limit: Option<u16>,
+    ) -> ClientResult<Vec<Playlist>> {
+        let playlists = self.search(term, limit).await?.playlists.items;
+        Ok(playlists)
     }
 
     pub async fn user_playlists(&self) -> ClientResult<Vec<Playlist>> {
@@ -237,10 +324,18 @@ impl Tidal {
         Ok(tracks)
     }
 
-    pub async fn playlist_add_tracks(&self, id: &str, tracks: Vec<Track>, add_dupes: bool) -> ClientResult<Playlist> {
+    pub async fn playlist_add_tracks(
+        &self,
+        id: &str,
+        tracks: Vec<Track>,
+        add_dupes: bool,
+    ) -> ClientResult<Playlist> {
         let url = format!("/playlists/{}/items", id);
         let etag: String = self.etag(&url).await?;
-        let track_ids: Vec<String> = tracks.iter().map(|track| track.id.unwrap().to_string()).collect();
+        let track_ids: Vec<String> = tracks
+            .iter()
+            .map(|track| track.id.unwrap().to_string())
+            .collect();
         let track_ids: String = track_ids.join(",");
 
         let on_dupes: String = if add_dupes {
@@ -265,8 +360,8 @@ impl Tidal {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
     use crate::auth::SessionInfo;
+    use mockito::{mock, Matcher};
 
     #[tokio::test]
     async fn client_get() {
@@ -275,8 +370,9 @@ mod tests {
         // All requesets going to Tidal ned to append ?countryCode=$USER_REGION
         let _mock = mock_request_success(
             "GET",
-            "/?countryCode=US",
-            r#"{"result": "ok"}"#
+            "/",
+            vec![Matcher::UrlEncoded("countryCode".into(), "US".into())],
+            r#"{"result": "ok"}"#,
         );
 
         let client = client();
@@ -285,12 +381,36 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn client_search() {
+        let _mock = mock_request_success_from_file(
+            "GET",
+            "/search",
+            vec![
+                Matcher::UrlEncoded("countryCode".into(), "US".into()),
+                Matcher::UrlEncoded("query".into(), "trivium".into()),
+                Matcher::UrlEncoded("limit".into(), "10".into()),
+            ],
+            "tests/files/search.json",
+        )
+        .create();
+
+        let result: TidalSearch = client().search("trivium", None).await.unwrap();
+
+        assert_eq!(result.artists.items.len(), 10);
+        assert_eq!(result.albums.items.len(), 10);
+        assert_eq!(result.tracks.items.len(), 10);
+        assert_eq!(result.playlists.items.len(), 10);
+    }
+
+    #[tokio::test]
     async fn client_artist() {
         let _mock = mock_request_success_from_file(
             "GET",
-            "/artists/37312?countryCode=US",
-            "tests/files/artist.json"
-        );
+            "/artists/37312",
+            vec![Matcher::UrlEncoded("countryCode".into(), "US".into())],
+            "tests/files/artist.json",
+        )
+        .create();
 
         let result: Artist = client().artist("37312").await.unwrap();
         let expected_result = Artist {
@@ -303,11 +423,30 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn client_search_artist() {
+        let _mock = mock_request_success_from_file(
+            "GET",
+            "/search",
+            vec![
+                Matcher::UrlEncoded("countryCode".into(), "US".into()),
+                Matcher::UrlEncoded("query".into(), "trivium".into()),
+            ],
+            "tests/files/search.json",
+        )
+        .create();
+
+        let result: Vec<Artist> = client().search_artist("trivium", None).await.unwrap();
+
+        assert_eq!(result.len(), 10);
+    }
+
+    #[tokio::test]
     async fn client_artist_albums() {
         let _mock = mock_request_success_from_file(
             "GET",
-            "/artists/37312/albums?countryCode=US",
-            "tests/files/artist_albums.json"
+            "/artists/37312/albums",
+            vec![Matcher::UrlEncoded("countryCode".into(), "US".into())],
+            "tests/files/artist_albums.json",
         );
 
         let result: Vec<Album> = client().artist_albums("37312").await.unwrap();
@@ -324,8 +463,9 @@ mod tests {
     async fn client_album() {
         let _mock = mock_request_success_from_file(
             "GET",
-            "/albums/79914998?countryCode=US",
-            "tests/files/album.json"
+            "/albums/79914998",
+            vec![Matcher::UrlEncoded("countryCode".into(), "US".into())],
+            "tests/files/album.json",
         );
 
         let result: Album = client().album("79914998").await.unwrap();
@@ -339,11 +479,30 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn client_search_album() {
+        let _mock = mock_request_success_from_file(
+            "GET",
+            "/search",
+            vec![
+                Matcher::UrlEncoded("countryCode".into(), "US".into()),
+                Matcher::UrlEncoded("query".into(), "trivium".into()),
+            ],
+            "tests/files/search.json",
+        )
+        .create();
+
+        let result: Vec<Album> = client().search_album("trivium", None).await.unwrap();
+
+        assert_eq!(result.len(), 10);
+    }
+
+    #[tokio::test]
     async fn client_album_tracks() {
         let _mock = mock_request_success_from_file(
             "GET",
-            "/albums/79914998/tracks?countryCode=US",
-            "tests/files/album_tracks.json"
+            "/albums/79914998/tracks",
+            vec![Matcher::UrlEncoded("countryCode".into(), "US".into())],
+            "tests/files/album_tracks.json",
         );
 
         let result: Vec<Track> = client().album_tracks("79914998").await.unwrap();
@@ -355,14 +514,36 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn client_search_tracks() {
+        let _mock = mock_request_success_from_file(
+            "GET",
+            "/search",
+            vec![
+                Matcher::UrlEncoded("countryCode".into(), "US".into()),
+                Matcher::UrlEncoded("query".into(), "trivium".into()),
+            ],
+            "tests/files/search.json",
+        )
+        .create();
+
+        let result: Vec<Track> = client().search_track("trivium", None).await.unwrap();
+
+        assert_eq!(result.len(), 10);
+    }
+
+    #[tokio::test]
     async fn client_playlist() {
         let _mock = mock_request_success_from_file(
             "GET",
-            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4?countryCode=US",
-            "tests/files/playlist.json"
+            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4",
+            vec![Matcher::UrlEncoded("countryCode".into(), "US".into())],
+            "tests/files/playlist.json",
         );
 
-        let result: Playlist = client().playlist("7ce7df87-6d37-4465-80db-84535a4e44a4").await.unwrap();
+        let result: Playlist = client()
+            .playlist("7ce7df87-6d37-4465-80db-84535a4e44a4")
+            .await
+            .unwrap();
         let expected_result = Playlist {
             uuid: Some("7ce7df87-6d37-4465-80db-84535a4e44a4".to_owned()),
             title: Some("Metal - TIDAL Masters".to_owned()),
@@ -376,8 +557,9 @@ mod tests {
     async fn client_user_playlists() {
         let _mock = mock_request_success_from_file(
             "GET",
-            "/users/1234/playlists?countryCode=US",
-            "tests/files/user_playlists.json"
+            "/users/1234/playlists",
+            vec![Matcher::UrlEncoded("countryCode".into(), "US".into())],
+            "tests/files/user_playlists.json",
         );
 
         let result: Vec<Playlist> = client().user_playlists().await.unwrap();
@@ -394,11 +576,15 @@ mod tests {
     async fn client_playlist_tracks() {
         let _mock = mock_request_success_from_file(
             "GET",
-            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4/tracks?countryCode=US",
-            "tests/files/playlist_tracks.json"
+            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4/tracks",
+            vec![Matcher::UrlEncoded("countryCode".into(), "US".into())],
+            "tests/files/playlist_tracks.json",
         );
 
-        let result: Vec<Track> = client().playlist_tracks("7ce7df87-6d37-4465-80db-84535a4e44a4").await.unwrap();
+        let result: Vec<Track> = client()
+            .playlist_tracks("7ce7df87-6d37-4465-80db-84535a4e44a4")
+            .await
+            .unwrap();
         let expected_first_result = Track {
             title: Some("FULL OF HEALTH".to_owned()),
             ..Default::default()
@@ -410,8 +596,9 @@ mod tests {
     async fn client_playlist_add_tracks() {
         let _mock_reload_playlist = mock_request_success_from_file(
             "GET",
-            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4?countryCode=US",
-            "tests/files/playlist.json"
+            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4",
+            vec![Matcher::UrlEncoded("countryCode".into(), "US".into())],
+            "tests/files/playlist.json",
         );
 
         let track_1 = Track {
@@ -422,32 +609,54 @@ mod tests {
             id: Some(7915000),
             ..Default::default()
         };
-        let tracks = vec!(track_1, track_2);
+        let tracks = vec![track_1, track_2];
 
-        let _mock_etag_req = mock("GET", "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4/items?countryCode=US")
-            .with_status(200)
-            .with_body("")
-            .with_header("etag", "123457689")
-            .create();
-        let mock_update_playlist = mock("POST", "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4/items?countryCode=US")
-            .with_status(200)
-            .match_header("if-none-match", "123457689")
-            .with_body(r#"{ "lastUpdated": 1600273268158, "addedItemIds": [ 79914999, 79915000 ] }"#)
-            .create();
+        let _mock_etag_req = mock(
+            "GET",
+            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4/items",
+        )
+        .match_query(Matcher::UrlEncoded("countryCode".into(), "US".into()))
+        .with_body("")
+        .with_header("etag", "123457689")
+        .create();
 
-        let _result: Playlist = client().playlist_add_tracks("7ce7df87-6d37-4465-80db-84535a4e44a4", tracks, false).await.unwrap();
+        let mock_update_playlist = mock(
+            "POST",
+            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4/items",
+        )
+        .match_query(Matcher::UrlEncoded("countryCode".into(), "US".into()))
+        .match_header("if-none-match", "123457689")
+        .with_body(r#"{ "lastUpdated": 1600273268158, "addedItemIds": [ 79914999, 79915000 ] }"#)
+        .create();
+
+        let _result: Playlist = client()
+            .playlist_add_tracks("7ce7df87-6d37-4465-80db-84535a4e44a4", tracks, false)
+            .await
+            .unwrap();
         mock_update_playlist.assert();
     }
 
-    fn mock_request_success(method: &str, path: &str, body: &str) -> mockito::Mock {
+    fn mock_request_success(
+        method: &str,
+        path: &str,
+        query: Vec<Matcher>,
+        body: &str,
+    ) -> mockito::Mock {
         mock(method, path)
+            .match_query(Matcher::AllOf(query))
             .with_status(200)
             .with_body(body)
             .create()
     }
 
-    fn mock_request_success_from_file(method: &str, path: &str, file_path: &str) -> mockito::Mock {
+    fn mock_request_success_from_file(
+        method: &str,
+        path: &str,
+        query: Vec<Matcher>,
+        file_path: &str,
+    ) -> mockito::Mock {
         mock(method, path)
+            .match_query(Matcher::AllOf(query))
             .with_status(200)
             .with_body_from_file(file_path)
             .create()
@@ -461,11 +670,11 @@ mod tests {
         let session: SessionInfo = SessionInfo {
             user_id: Some(1234),
             session_id: Some("session-id-1".to_owned()),
-            country_code: "US".to_owned()
+            country_code: "US".to_owned(),
         };
         TidalCredentials {
             token: "some_token".to_owned(),
-            session_info: Some(session)
+            session_info: Some(session),
         }
     }
 }
