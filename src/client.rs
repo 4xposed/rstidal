@@ -2,7 +2,6 @@
 use reqwest::header::HeaderMap;
 use reqwest::{Client, Method, Response, StatusCode};
 use serde::Deserialize;
-use serde_json::Value;
 use thiserror::Error;
 
 #[cfg(test)]
@@ -26,6 +25,8 @@ pub enum ClientError {
     Unauthorized,
     #[error("tidal error: {0}")]
     Api(#[from] ApiError),
+    #[error("etag heeader parse error")]
+    ParseEtag,
     #[error("json parse error: {0}")]
     ParseJSON(#[from] serde_json::Error),
     #[error("request error: {0}")]
@@ -110,7 +111,7 @@ impl Tidal {
         self.credentials.session_info.as_ref().unwrap().user_id.unwrap()
     }
 
-    async fn api_call(&self, method: Method, url: &str, payload: Option<&Value>) -> ClientResult<String> {
+    async fn api_call(&self, method: Method, url: &str, query: Option<&HashMap<String, String>>, payload: Option<&HashMap<&str, &str>>, etag: Option<String>) -> ClientResult<Response> {
         #[cfg(not(test))]
         let base_url: &str = "https://api.tidalhifi.com/v1";
         #[cfg(test)]
@@ -124,16 +125,29 @@ impl Tidal {
         let mut headers = HeaderMap::new();
         headers.insert("X-Tidal-SessionId", self.session_id().parse().unwrap());
         headers.insert("Origin", "http://listen.tidal.com".parse().unwrap());
+        if let Some(etag) = etag {
+            headers.insert("If-None-Match", etag.parse().unwrap());
+        }
+
+        let mut query_params: HashMap<String, String> = HashMap::new();
+        query_params.insert("countryCode".to_owned(), self.country_code());
+
+        if let Some(query) = query {
+            for (key, value) in query.iter() {
+                query_params.insert(key.clone(), value.clone());
+            };
+        }
 
         let response = {
             let builder = self
                 .client
                 .request(method, &url.into_owned())
-                .headers(headers);
+                .headers(headers)
+                .query(&query_params);
 
             // Only add payload when sent
-            let builder = if let Some(json) = payload {
-                builder.json(json)
+            let builder = if let Some(form) = payload {
+                builder.form(form)
             } else {
                 builder
             };
@@ -142,33 +156,40 @@ impl Tidal {
         };
 
         if response.status().is_success() {
-            response.text().await.map_err(Into::into)
+            Ok(response)
         } else {
             Err(ClientError::from_response(response).await)
         }
     }
 
-    pub async fn get(&self, url: &str, params: &mut HashMap<String, String>) -> ClientResult<String> {
+    pub async fn etag(&self, url: &str) -> ClientResult<String> {
         // Tidal's API requires countryCode to always be passed
-        params.insert("countryCode".to_owned(), self.country_code());
-        let param_string: String = serde_urlencoded::to_string(params).unwrap();
-        let mut url_with_params = url.to_owned();
-        url_with_params.push('?');
-        url_with_params.push_str(&param_string);
-        self.api_call(Method::GET, &url_with_params, None).await
+        let headers = self.api_call(Method::GET, &url, None, None, None).await?.headers().clone();
+
+        if let Ok(etag) = headers.get("etag").unwrap().to_str() {
+            Ok(etag.to_owned())
+        } else {
+            Err(ClientError::ParseEtag)
+        }
     }
 
-    //pub async fn post(&self, url: &str, payload: &Value) -> ClientResult<String> {
-        //self.api_call(Method::POST, url, Some(payload)).await
+    pub async fn get(&self, url: &str, params: &mut HashMap<String, String>) -> ClientResult<String> {
+        // Tidal's API requires countryCode to always be passed
+        self.api_call(Method::GET, &url, Some(params), None, None).await?.text().await.map_err(Into::into)
+    }
+
+    pub async fn post(&self, url: &str, payload: &HashMap<&str, &str>, etag: String) -> ClientResult<String> {
+        self.api_call(Method::POST, &url, None, Some(payload), Some(etag)).await?.text().await.map_err(Into::into)
+    }
+
+    pub async fn put(&self, url: &str, payload: &HashMap<&str, &str>, etag: String) -> ClientResult<String> {
+        self.api_call(Method::PUT, url, None, Some(payload), Some(etag)).await?.text().await.map_err(Into::into)
+    }
+
+    //pub async fn delete(&self, url: &str, payload: &Value, etag: String) -> ClientResult<String> {
+        //self.api_call(Method::DELETE, url, Some(payload), Some(etag).await
     //}
 
-    //pub async fn put(&self, url: &str, payload: &Value) -> ClientResult<String> {
-        //self.api_call(Method::PUT, url, Some(payload)).await
-    //}
-
-    //pub async fn delete(&self, url: &str, payload: &Value) -> ClientResult<String> {
-        //self.api_call(Method::DELETE, url, Some(payload)).await
-    //}
     pub async fn artist(&self, id: &str) -> ClientResult<Artist> {
         let url = format!("/artists/{}", id);
         let result = self.get(&url, &mut HashMap::new()).await?;
@@ -214,6 +235,26 @@ impl Tidal {
         let result = self.get(&url, &mut HashMap::new()).await?;
         let tracks = Self::convert_result::<TidalItems<Track>>(&result)?.items;
         Ok(tracks)
+    }
+
+    pub async fn playlist_add_tracks(&self, id: &str, tracks: Vec<Track>, add_dupes: bool) -> ClientResult<Playlist> {
+        let url = format!("/playlists/{}/items", id);
+        let etag: String = self.etag(&url).await?;
+        let track_ids: Vec<String> = tracks.iter().map(|track| track.id.unwrap().to_string()).collect();
+        let track_ids: String = track_ids.join(",");
+
+        let on_dupes: String = if add_dupes {
+            "ADD".to_owned()
+        } else {
+            "FAIL".to_owned()
+        };
+
+        let mut form: HashMap<&str, &str> = HashMap::new();
+        form.insert("trackIds", &track_ids);
+        form.insert("onDupes", &on_dupes);
+
+        self.post(&url, &form, etag).await?;
+        self.playlist(id).await
     }
 
     fn convert_result<'a, T: Deserialize<'a>>(input: &'a str) -> ClientResult<T> {
@@ -363,6 +404,39 @@ mod tests {
             ..Default::default()
         };
         assert_eq!(result[0].title, expected_first_result.title);
+    }
+
+    #[tokio::test]
+    async fn client_playlist_add_tracks() {
+        let _mock_reload_playlist = mock_request_success_from_file(
+            "GET",
+            "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4?countryCode=US",
+            "tests/files/playlist.json"
+        );
+
+        let track_1 = Track {
+            id: Some(79914998),
+            ..Default::default()
+        };
+        let track_2 = Track {
+            id: Some(7915000),
+            ..Default::default()
+        };
+        let tracks = vec!(track_1, track_2);
+
+        let _mock_etag_req = mock("GET", "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4/items?countryCode=US")
+            .with_status(200)
+            .with_body("")
+            .with_header("etag", "123457689")
+            .create();
+        let mock_update_playlist = mock("POST", "/playlists/7ce7df87-6d37-4465-80db-84535a4e44a4/items?countryCode=US")
+            .with_status(200)
+            .match_header("if-none-match", "123457689")
+            .with_body(r#"{ "lastUpdated": 1600273268158, "addedItemIds": [ 79914999, 79915000 ] }"#)
+            .create();
+
+        let _result: Playlist = client().playlist_add_tracks("7ce7df87-6d37-4465-80db-84535a4e44a4", tracks, false).await.unwrap();
+        mock_update_playlist.assert();
     }
 
     fn mock_request_success(method: &str, path: &str, body: &str) -> mockito::Mock {
