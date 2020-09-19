@@ -1,4 +1,5 @@
 // Use 3rd party
+use log::{debug, warn};
 use reqwest::header::HeaderMap;
 use reqwest::{Client, Method, Response, StatusCode};
 use serde::Deserialize;
@@ -63,7 +64,7 @@ pub enum ApiError {
     },
 }
 
-type ClientResult<T> = Result<T, ClientError>;
+pub type ClientResult<T> = Result<T, ClientError>;
 
 #[derive(Default, Debug, Deserialize)]
 pub struct TidalItems<T> {
@@ -79,6 +80,7 @@ pub struct TidalSearch {
 }
 
 // Tidal API
+
 pub struct Tidal {
     client: Client,
     credentials: TidalCredentials,
@@ -89,11 +91,10 @@ impl Tidal {
     pub fn new(credentials: TidalCredentials) -> Self {
         let _sesion_id = match &credentials.session_info {
             None => panic!("A session needs to be obtatined before using Tidal"),
-                Some(session_info) => match &session_info.session_id {
-                    Some(session_id) => session_id,
-                    None => panic!("You need an authenticated credential to use Tidal")
-                }
-
+            Some(session_info) => match &session_info.session_id {
+                Some(session_id) => session_id,
+                None => panic!("You need an authenticated credential to use Tidal"),
+            },
         };
 
         Self {
@@ -166,9 +167,11 @@ impl Tidal {
                 builder
             };
 
+            debug!("request builder: {:?}", builder);
             builder.send().await.map_err(ClientError::from)?
         };
 
+        debug!("response content: {:?}", response);
         if response.status().is_success() {
             Ok(response)
         } else {
@@ -184,7 +187,11 @@ impl Tidal {
             .headers()
             .clone();
 
-        if let Ok(etag) = headers.get("etag").unwrap().to_str() {
+        if let Ok(etag) = headers
+            .get("etag")
+            .expect("etag header to be present")
+            .to_str()
+        {
             Ok(etag.to_owned())
         } else {
             Err(ClientError::ParseEtag)
@@ -207,9 +214,9 @@ impl Tidal {
         &self,
         url: &str,
         payload: &HashMap<&str, &str>,
-        etag: String,
+        etag: Option<String>,
     ) -> ClientResult<String> {
-        self.api_call(Method::POST, &url, None, Some(payload), Some(etag))
+        self.api_call(Method::POST, &url, None, Some(payload), etag)
             .await?
             .text()
             .await
@@ -229,126 +236,85 @@ impl Tidal {
             .map_err(Into::into)
     }
 
-    //pub async fn delete(&self, url: &str, payload: &Value, etag: String) -> ClientResult<String> {
-        //self.api_call(Method::DELETE, url, Some(payload), Some(etag).await
-    //}
-
+    // The following functions are for backward compatibility only
+    //
     pub async fn search(&self, term: &str, limit: Option<u16>) -> ClientResult<TidalSearch> {
-        let url = "/search";
-        let limit = if let Some(limit) = limit { limit } else { 10 };
-        let mut params: HashMap<String, String> = HashMap::new();
-        params.insert("query".to_owned(), term.to_owned());
-        params.insert("limit".to_owned(), limit.to_string());
-        let result = self.get(&url, &mut params).await?;
-        Self::convert_result::<TidalSearch>(&result)
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .searches().find()");
+        self.searches().find(term, limit).await
     }
 
     pub async fn artist(&self, id: &str) -> ClientResult<Artist> {
-        let url = format!("/artists/{}", id);
-        let result = self.get(&url, &mut HashMap::new()).await?;
-        Self::convert_result::<Artist>(&result)
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .artists().get()");
+        self.artists().get(id).await
     }
 
     pub async fn search_artist(&self, term: &str, limit: Option<u16>) -> ClientResult<Vec<Artist>> {
-        let artists = self.search(term, limit).await?.artists.items;
-        Ok(artists)
-    }
-
-    pub async fn artist_albums(&self, id: &str) -> ClientResult<Vec<Album>> {
-        let url = format!("/artists/{}/albums", id);
-        let result = self.get(&url, &mut HashMap::new()).await?;
-        let albums = Self::convert_result::<TidalItems<Album>>(&result)?.items;
-        Ok(albums)
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .artists().search()");
+        self.artists().search(term, limit).await
     }
 
     pub async fn album(&self, id: &str) -> ClientResult<Album> {
-        let url = format!("/albums/{}", id);
-        let result = self.get(&url, &mut HashMap::new()).await?;
-        Self::convert_result::<Album>(&result)
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .albums().get()");
+        self.albums().get(id).await
+    }
+
+    pub async fn artist_albums(&self, id: &str) -> ClientResult<Vec<Album>> {
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .artists().albums()");
+        self.artists().albums(id).await
     }
 
     pub async fn search_album(&self, term: &str, limit: Option<u16>) -> ClientResult<Vec<Album>> {
-        let albums = self.search(term, limit).await?.albums.items;
-        Ok(albums)
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .albums().search()");
+        self.albums().search(term, limit).await
     }
 
     pub async fn album_tracks(&self, id: &str) -> ClientResult<Vec<Track>> {
-        let url = format!("/albums/{}/tracks", id);
-        let result = self.get(&url, &mut HashMap::new()).await?;
-        let tracks = Self::convert_result::<TidalItems<Track>>(&result)?.items;
-        Ok(tracks)
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .albums().tracks()");
+        self.albums().tracks(id).await
     }
 
     pub async fn search_track(&self, term: &str, limit: Option<u16>) -> ClientResult<Vec<Track>> {
-        let tracks = self.search(term, limit).await?.tracks.items;
-        Ok(tracks)
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .tracks().search()");
+        self.tracks().search(term, limit).await
     }
 
     pub async fn playlist(&self, id: &str) -> ClientResult<Playlist> {
-        let url = format!("/playlists/{}", id);
-        let result = self.get(&url, &mut HashMap::new()).await?;
-        Self::convert_result::<Playlist>(&result)
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .playlists().get()");
+        self.playlists().get(id).await
     }
 
-    pub async fn search_playlist(
-        &self,
-        term: &str,
-        limit: Option<u16>,
-    ) -> ClientResult<Vec<Playlist>> {
-        let playlists = self.search(term, limit).await?.playlists.items;
-        Ok(playlists)
+    pub async fn search_playlist(&self, term: &str, limit: Option<u16>) -> ClientResult<Vec<Playlist>> {
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .playlists().search()");
+        self.playlists().search(term, limit).await
     }
 
     pub async fn user_playlists(&self) -> ClientResult<Vec<Playlist>> {
-        let user_id = self.user_id();
-        let url = format!("/users/{}/playlists", user_id);
-        let result = self.get(&url, &mut HashMap::new()).await?;
-        let playlists = Self::convert_result::<TidalItems<Playlist>>(&result)?.items;
-        Ok(playlists)
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .playlists().user_playlists()");
+        self.playlists().user_playlists().await
     }
 
     pub async fn playlist_tracks(&self, id: &str) -> ClientResult<Vec<Track>> {
-        let url = format!("/playlists/{}/tracks", id);
-        let result = self.get(&url, &mut HashMap::new()).await?;
-        let tracks = Self::convert_result::<TidalItems<Track>>(&result)?.items;
-        Ok(tracks)
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .playlists().tracks()");
+        self.playlists().tracks(id).await
     }
 
-    pub async fn playlist_add_tracks(
-        &self,
-        id: &str,
-        tracks: Vec<Track>,
-        add_dupes: bool,
-    ) -> ClientResult<Playlist> {
-        let url = format!("/playlists/{}/items", id);
-        let etag: String = self.etag(&url).await?;
-        let track_ids: Vec<String> = tracks
-            .iter()
-            .map(|track| track.id.unwrap().to_string())
-            .collect();
-        let track_ids: String = track_ids.join(",");
-
-        let on_dupes: String = if add_dupes {
-            "ADD".to_owned()
-        } else {
-            "FAIL".to_owned()
-        };
-
-        let mut form: HashMap<&str, &str> = HashMap::new();
-        form.insert("trackIds", &track_ids);
-        form.insert("onDupes", &on_dupes);
-
-        self.post(&url, &form, etag).await?;
-        self.playlist(id).await
+    pub async fn playlist_add_tracks(&self, id: &str, tracks: Vec<Track>, add_dupes: bool) -> ClientResult<Playlist> {
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .playlists().add_tracks()");
+        self.playlists().add_tracks(id, tracks, add_dupes).await
     }
 
-    fn convert_result<'a, T: Deserialize<'a>>(input: &'a str) -> ClientResult<T> {
+    pub async fn create_playlist(&self, title: &str, description: &str) -> ClientResult<Playlist> {
+        warn!("DEPRECATION WARNING!: This method will be deprecated in the next version. Please favor using .playlists().create()");
+        self.playlists().create(title, description).await
+    }
+
+    pub fn convert_result<'a, T: Deserialize<'a>>(input: &'a str) -> ClientResult<T> {
         serde_json::from_str::<T>(input).map_err(Into::into)
     }
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     use super::*;
     use crate::auth::SessionInfo;
     use mockito::{mock, Matcher};
@@ -639,7 +605,7 @@ mod tests {
             .create()
     }
 
-    fn mock_request_success_from_file(
+    pub fn mock_request_success_from_file(
         method: &str,
         path: &str,
         query: Vec<Matcher>,
@@ -652,7 +618,7 @@ mod tests {
             .create()
     }
 
-    fn client() -> Tidal {
+    pub fn client() -> Tidal {
         Tidal::new(credential())
     }
 
