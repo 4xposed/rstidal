@@ -103,33 +103,18 @@ impl Tidal {
     }
 
     fn session_id(&self) -> String {
-        let credentials = self.credentials.clone();
-        let session_id = match &credentials.session_info {
-            None => panic!("A session needs to be obtained before using Tidal"),
-            Some(session_info) => match &session_info.session_id {
-                Some(session_id) => session_id,
-                None => panic!("An active sessions needs to be obtained before using Tidal"),
-            },
-        };
-        session_id.to_owned()
+        // Here it's safe to use unwrap because in ::new() we already checked that there's a valid session_info
+        self.credentials.session_info.as_ref().unwrap().session_id.as_ref().unwrap().to_owned()
     }
 
     fn country_code(&self) -> String {
-        self.credentials
-            .session_info
-            .as_ref()
-            .unwrap()
-            .country_code
-            .to_owned()
+        // Here it's safe to use unwrap because in ::new() we already checked that there's a valid session_info
+        self.credentials.session_info.as_ref().unwrap().country_code.to_owned()
     }
 
-    fn user_id(&self) -> u32 {
-        self.credentials
-            .session_info
-            .as_ref()
-            .unwrap()
-            .user_id
-            .unwrap()
+    pub fn user_id(&self) -> u32 {
+        // Here it's safe to use unwrap because in ::new() we already checked that there's a valid session_info
+        self.credentials.session_info.as_ref().unwrap().user_id.unwrap()
     }
 
     async fn api_call(
