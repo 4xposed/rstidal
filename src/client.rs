@@ -87,8 +87,13 @@ pub struct Tidal {
 impl Tidal {
     #[must_use]
     pub fn new(credentials: TidalCredentials) -> Self {
-        if credentials.to_owned().session_info.unwrap().session_id.is_none() {
-            panic!("You need an authenticated credential to use Tidal");
+        let _sesion_id = match &credentials.session_info {
+            None => panic!("A session needs to be obtatined before using Tidal"),
+                Some(session_info) => match &session_info.session_id {
+                    Some(session_id) => session_id,
+                    None => panic!("You need an authenticated credential to use Tidal")
+                }
+
         };
 
         Self {
