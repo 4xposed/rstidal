@@ -12,7 +12,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rstidal = "0.1.0"
+rstidal = "0.1.2"
 ```
 
 By default, Rstidal uses asynchronous programming with `asycn` and `await`.
@@ -62,7 +62,7 @@ async fn main() {
 
   // Use the credentials to start the client
   let client = Tidal::new(credentials);
-  let artist = client.artist("37312").await;
+  let artist = client.artists.get("37312").await;
   println!("{:?}", artist.unwrap());
 }
 ```
