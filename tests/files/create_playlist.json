@@ -1,0 +1,21 @@
+{
+  "uuid": "3c08a484-5b03-4719-953f-46018772af42",
+  "title": "something",
+  "numberOfTracks": 0,
+  "numberOfVideos": 0,
+  "creator": {
+    "id": 173393682
+  },
+  "description": "some desc",
+  "duration": 0,
+  "lastUpdated": "2020-09-19T16:48:19.032+0000",
+  "created": "2020-09-19T16:48:19.032+0000",
+  "type": "USER",
+  "publicPlaylist": false,
+  "url": "http://www.tidal.com/playlist/3c08a484-5b03-4719-953f-46018772af42",
+  "image": "e59903d7-94a7-454c-8a78-6a6586967dda",
+  "popularity": 0,
+  "squareImage": "e9448a9a-3ade-4f79-93d2-12e6d8d4b2eb",
+  "promotedArtists": [],
+  "lastItemAddedAt": null
+}
