@@ -2,7 +2,7 @@
 
 use std::collections::HashMap;
 
-use crate::client::*;
+use crate::client::{ClientResult, Tidal, TidalSearch};
 
 pub struct Search<'a>(pub &'a Tidal);
 

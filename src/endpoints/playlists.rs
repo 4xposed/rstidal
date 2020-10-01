@@ -2,9 +2,9 @@
 
 use std::collections::HashMap;
 
-use crate::client::*;
-use crate::model::playlist::*;
-use crate::model::track::*;
+use crate::client::{ClientResult, Tidal, TidalItems};
+use crate::model::playlist::Playlist;
+use crate::model::track::Track;
 
 pub struct Playlists<'a>(pub &'a Tidal);
 
@@ -28,7 +28,13 @@ impl Playlists<'_> {
     }
 
     pub async fn create(&self, title: &str, description: &str) -> ClientResult<Playlist> {
-        let user_id = self.0.user_id();
+        let user_id = self
+            .0
+            .credentials
+            .session
+            .as_ref()
+            .expect("A valid session must be initialized")
+            .user_id;
         let url = format!("/users/{}/playlists", user_id);
         println!("URL: {:?}", url);
         let mut form: HashMap<&str, &str> = HashMap::new();

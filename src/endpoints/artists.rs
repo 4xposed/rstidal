@@ -2,9 +2,9 @@
 
 use std::collections::HashMap;
 
-use crate::client::*;
-use crate::model::album::*;
-use crate::model::artist::*;
+use crate::client::{ClientResult, Tidal, TidalItems};
+use crate::model::album::Album;
+use crate::model::artist::Artist;
 
 pub struct Artists<'a>(pub &'a Tidal);
 
