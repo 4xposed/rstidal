@@ -13,7 +13,7 @@ use std::borrow::Cow;
 use std::collections::HashMap;
 
 // Use internal modules
-use crate::auth::TidalCredentials;
+use crate::auth::{Session, TidalCredentials};
 use crate::model::album::Album;
 use crate::model::artist::Artist;
 use crate::model::playlist::Playlist;
@@ -83,16 +83,15 @@ pub struct TidalSearch {
 
 pub struct Tidal {
     client: Client,
-    credentials: TidalCredentials,
+    pub(crate) credentials: TidalCredentials,
 }
 
 impl Tidal {
     #[must_use]
     pub fn new(credentials: TidalCredentials) -> Self {
-        let _sesion_id = match &credentials.session_info {
-            None => panic!("A session needs to be obtatined before using Tidal"),
-            Some(session_info) => session_info.clone().session_id.expect("You need an authenticated credential to use Tidal"),
-        };
+        if credentials.session.is_none() {
+            panic!("A session needs to be obtatined before using Tidal");
+        }
 
         Self {
             client: Client::new(),
@@ -100,19 +99,10 @@ impl Tidal {
         }
     }
 
-    fn session_id(&self) -> String {
-        // Here it's safe to use unwrap because in ::new() we already checked that there's a valid session_info
-        self.credentials.session_info.as_ref().unwrap().session_id.as_ref().unwrap().to_owned()
-    }
-
-    fn country_code(&self) -> String {
-        // Here it's safe to use unwrap because in ::new() we already checked that there's a valid session_info
-        self.credentials.session_info.as_ref().unwrap().country_code.to_owned()
-    }
-
     pub fn user_id(&self) -> u32 {
-        // Here it's safe to use unwrap because in ::new() we already checked that there's a valid session_info
-        self.credentials.session_info.as_ref().unwrap().user_id.unwrap()
+        // Here it's safe to use unwrap because in ::new() we already checked that there's a valid
+        // session
+        self.credentials.session.as_ref().unwrap().user_id
     }
 
     async fn api_call(
@@ -133,8 +123,10 @@ impl Tidal {
             url = [base_url, &url].concat().into();
         }
 
+        let Session { session_id, country_code, .. } = self.credentials.session.as_ref().unwrap();
+
         let mut headers = HeaderMap::new();
-        headers.insert("X-Tidal-SessionId", self.session_id().parse().unwrap());
+        headers.insert("X-Tidal-SessionId", session_id.parse().unwrap());
         headers.insert("Origin", "http://listen.tidal.com".parse().unwrap());
         if let Some(etag) = etag {
             headers.insert("If-None-Match", etag.parse().unwrap());
@@ -142,7 +134,7 @@ impl Tidal {
 
         // Tidal's API requires countryCode to always be passed
         let mut query_params: HashMap<String, String> = HashMap::new();
-        query_params.insert("countryCode".to_owned(), self.country_code());
+        query_params.insert("countryCode".to_owned(), country_code.to_owned());
 
         if let Some(query) = query {
             for (key, value) in query.iter() {
@@ -313,7 +305,7 @@ impl Tidal {
 #[cfg(test)]
 pub mod tests {
     use super::*;
-    use crate::auth::SessionInfo;
+    use crate::auth::Session;
     use mockito::{mock, Matcher};
 
     #[tokio::test]
@@ -620,14 +612,14 @@ pub mod tests {
     }
 
     fn credential() -> TidalCredentials {
-        let session: SessionInfo = SessionInfo {
-            user_id: Some(1234),
-            session_id: Some("session-id-1".to_owned()),
+        let session: Session = Session {
+            user_id: 1234,
+            session_id: "session-id-1".to_owned(),
             country_code: "US".to_owned(),
         };
         TidalCredentials {
             token: "some_token".to_owned(),
-            session_info: Some(session),
+            session: Some(session),
         }
     }
 }

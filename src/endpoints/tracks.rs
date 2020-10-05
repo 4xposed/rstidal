@@ -1,7 +1,7 @@
 //! Endpoint functions related to playlists
 
-use crate::client::*;
-use crate::model::track::*;
+use crate::client::{ClientResult, Tidal};
+use crate::model::track::Track;
 
 pub struct Tracks<'a>(pub &'a Tidal);
 
