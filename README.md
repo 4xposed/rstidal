@@ -36,7 +36,7 @@ requests to `api.tidal.com` and copy the value it uses in the header `X-Tidal-To
 ```toml
 [dependencies]
 rstidal = { version = "0.1.0" }
-tokio = { version = "0.2", feeatures = ["full"] }
+tokio = { version = "0.2", features = ["full"] }
 ```
 
 ```rust
