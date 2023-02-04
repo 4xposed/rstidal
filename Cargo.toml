@@ -21,5 +21,5 @@ thiserror = "1.0"
 
 [dev-dependencies]
 mockito = "0.27.0"
-tokio = { version = "0.2", features = ["full"] }
+tokio = { version = "1.13", features = ["full"] }
 dotenv = { version = "0.15.0" }
