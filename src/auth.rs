@@ -9,6 +9,10 @@ use mockito;
 // Use built-in library
 use std::collections::HashMap;
 
+// Use internal modules
+use crate::config::params;
+use crate::error::{AuthError, TidalError, TidalResult};
+
 #[derive(Clone, Debug)]
 pub struct TidalCredentials {
     pub token: String,
@@ -29,32 +33,24 @@ impl TidalCredentials {
         self
     }
 
-    #[must_use]
-    pub async fn create_session(self, username: &str, password: &str) -> Self {
+    /// Create a session with the provided credentials
+    /// Returns an error if the token is empty or session creation fails
+    pub async fn create_session(self, username: &str, password: &str) -> TidalResult<Self> {
         if self.token.is_empty() {
-            // A token needs to be set before this function can be called
-            panic!("Application Token needs to be set")
+            return Err(TidalError::Authentication(AuthError::MissingToken));
         }
-        let token = self.token.to_owned();
-        let session = Session::get_session(&token, username, password).await.ok();
-        self.session(session)
+
+        let session = Session::get_session(&self.token, username, password).await?;
+        Ok(self.session(Some(session)))
     }
 }
 
 //Tidal session example:
 //{
-    //"userId": 173393989,
-    //"sessionId": "84df94d0-9t0b-537a-a485-4404e45581ft",
-    //"countryCode": "DE"
+//"userId": 173393989,
+//"sessionId": "84df94d0-9t0b-537a-a485-4404e45581ft",
+//"countryCode": "DE"
 //}
-
-#[derive(thiserror::Error,Debug)]
-pub enum AuthError {
-    #[error("The Authe request Failed")]
-    AuthRequestFailed { #[from] source: reqwest::Error },
-    #[error("Fetch session failed")]
-    CreateSessionFailed
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -65,17 +61,16 @@ pub struct Session {
 }
 
 impl Session {
-    pub async fn get_session(token: &str, username: &str, password: &str) -> Result<Self, AuthError> {
-        let mut payload: HashMap<&str, &str> = HashMap::new();
+    pub async fn get_session(token: &str, username: &str, password: &str) -> TidalResult<Self> {
+        let mut payload: HashMap<&str, &str> = HashMap::with_capacity(2);
         payload.insert("username", username);
         payload.insert("password", password);
         Self::fetch_session_data(token, &payload).await
     }
 
-    async fn fetch_session_data(token: &str, payload: &HashMap<&str, &str>) -> Result<Self, AuthError> {
+    async fn fetch_session_data(token: &str, payload: &HashMap<&str, &str>) -> TidalResult<Self> {
         let client = Client::new();
-        let token = token.to_owned();
-        let query = [("token", &token)];
+        let query = [(params::TOKEN, token)];
 
         #[cfg(not(test))]
         let url = "https://api.tidalhifi.com/v1/login/username";
@@ -86,21 +81,32 @@ impl Session {
         let response = client
             .post(url)
             .query(&query)
-            .form(&payload)
+            .form(payload)
             .send()
-            .await?;
+            .await
+            .map_err(AuthError::RequestFailed)?;
 
         if response.status().is_success() {
-            debug!("response content: {:?}", response);
-            let session: Session = response.json().await?;
+            debug!("Session creation successful");
+            let session: Session = response
+                .json()
+                .await
+                .map_err(|e| TidalError::Authentication(AuthError::RequestFailed(e)))?;
             Ok(session)
         } else {
             error!(
-                "Creating session failed. token: {:?}, form: {:?}",
-                &token, &payload
+                "Session creation failed. Status: {}, Token length: {}, Payload: {:?}",
+                response.status(),
+                token.len(),
+                payload.keys().collect::<Vec<_>>()
             );
-            error!("{:?}", response);
-            Err(AuthError::CreateSessionFailed)
+
+            match response.status() {
+                reqwest::StatusCode::UNAUTHORIZED => {
+                    Err(TidalError::Authentication(AuthError::InvalidCredentials))
+                }
+                _ => Err(TidalError::Authentication(AuthError::SessionCreationFailed)),
+            }
         }
     }
 }
@@ -131,13 +137,17 @@ mod tests {
     async fn test_credential_create_session_w_token() {
         let token = "some_token";
         let username = "myuser@example.com";
-        let password = "somepawssowrd";
+        let password = "somepassword";
         let credentials = TidalCredentials::new(token);
 
-        // Test scucessful login
+        // Test successful login
         {
             let _mock = mock_successful_login();
-            let credential_w_session = credentials.clone().create_session(username, password).await;
+            let credential_w_session = credentials
+                .clone()
+                .create_session(username, password)
+                .await
+                .unwrap();
             assert_eq!(
                 credential_w_session.session.unwrap().session_id,
                 "session-id-123"
@@ -146,10 +156,19 @@ mod tests {
         // Test failed login
         {
             let _mock = mock_failed_login();
-            let credential_wo_session =
-                credentials.clone().create_session(username, password).await;
-            assert_eq!(credential_wo_session.session.is_none(), true);
+            let credential_result = credentials.clone().create_session(username, password).await;
+            assert!(credential_result.is_err());
         }
+    }
+
+    #[tokio::test]
+    async fn test_create_session_empty_token() {
+        let credentials = TidalCredentials::new("");
+        let result = credentials.create_session("user", "pass").await;
+        assert!(matches!(
+            result,
+            Err(TidalError::Authentication(AuthError::MissingToken))
+        ));
     }
 
     fn mock_successful_login() -> mockito::Mock {
